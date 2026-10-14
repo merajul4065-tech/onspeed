@@ -27,9 +27,9 @@ jobs:
       - name: Recreate Android Files
         run: flutter create . --platforms=android --org=com.onspeed.customer
 
-      - name: Add Internet Permission to Android
+      - name: Add Permissions & Queries to Manifest
         run: |
-          sed -i '/<manifest xmlns:android/a \    <uses-permission android:name="android.permission.INTERNET"/>' android/app/src/main/AndroidManifest.xml
+          sed -i '/<manifest xmlns:android/a \    <uses-permission android:name="android.permission.INTERNET"/>\n    <queries>\n        <package android:name="com.whatsapp"/>\n        <intent>\n            <action android:name="android.intent.action.VIEW"/>\n            <data android:scheme="https"/>\n        </intent>\n    </queries>' android/app/src/main/AndroidManifest.xml
 
       - name: Build Release APK
         run: flutter build apk --release
@@ -37,8 +37,8 @@ jobs:
       - name: Upload Release
         uses: softprops/action-gh-release@v2
         with:
-          tag_name: v1.0.3
-          name: OnSpeed Customer App v1.0.3 (PIN Auth & Internet)
+          tag_name: v1.0.5
+          name: OnSpeed Customer App v1.0.5 (WhatsApp Auth)
           files: build/app/outputs/flutter-apk/app-release.apk
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
