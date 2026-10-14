@@ -24,12 +24,12 @@ jobs:
           flutter-version: '3.24.0'
           channel: 'stable'
 
-      - name: Recreate Android Files
+      - name: Recreate Android Project
         run: flutter create . --platforms=android --org=com.onspeed.customer
 
-      - name: Add Permissions & Location Manifest
+      - name: Add Permissions
         run: |
-          sed -i '/<manifest xmlns:android/a \    <uses-permission android:name="android.permission.INTERNET"/>\n    <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION"/>\n    <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION"/>\n    <queries>\n        <package android:name="com.whatsapp"/>\n        <intent>\n            <action android:name="android.intent.action.VIEW"/>\n            <data android:scheme="https"/>\n        </intent>\n    </queries>' android/app/src/main/AndroidManifest.xml
+          sed -i 's/<manifest xmlns:android="http:\/\/schemas.android.com\/apk\/res\/android">/<manifest xmlns:android="http:\/\/schemas.android.com\/apk\/res\/android">\n    <uses-permission android:name="android.permission.INTERNET"\/>\n    <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION"\/>\n    <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION"\/>/' android/app/src/main/AndroidManifest.xml
 
       - name: Build Release APK
         run: flutter build apk --release
@@ -37,8 +37,8 @@ jobs:
       - name: Upload Release
         uses: softprops/action-gh-release@v2
         with:
-          tag_name: v1.0.6
-          name: OnSpeed Customer v1.0.6 (Modern UI & Current Location)
+          tag_name: v1.0.7
+          name: OnSpeed Customer App v1.0.7
           files: build/app/outputs/flutter-apk/app-release.apk
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
