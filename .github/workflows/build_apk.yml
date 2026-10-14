@@ -27,15 +27,18 @@ jobs:
       - name: Recreate Android Files
         run: flutter create . --platforms=android --org=com.onspeed.customer
 
+      - name: Add Internet Permission to Android
+        run: |
+          sed -i '/<manifest xmlns:android/a \    <uses-permission android:name="android.permission.INTERNET"/>' android/app/src/main/AndroidManifest.xml
+
       - name: Build Release APK
         run: flutter build apk --release
 
       - name: Upload Release
         uses: softprops/action-gh-release@v2
         with:
-          tag_name: v1.0.0
-          name: OnSpeed Customer App Build #1
-          body: "Direct download link for OnSpeed Customer App."
+          tag_name: v1.0.3
+          name: OnSpeed Customer App v1.0.3 (PIN Auth & Internet)
           files: build/app/outputs/flutter-apk/app-release.apk
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
